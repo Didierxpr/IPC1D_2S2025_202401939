@@ -29,6 +29,7 @@ public class Practica1_IPC1 {
             System.out.println("7. Ver historial de peleas");
             System.out.println("8. Datos del estudiante");
             System.out.println("9. Salir");
+            System.out.println("10. Imprimir cadena de texto calificacion");
             System.out.print("Selecciona una opción: ");
 
             try {
@@ -47,8 +48,9 @@ public class Practica1_IPC1 {
                         System.out.println("Nombre: Carlos Didiere Cabrera Rodríguez");
                         System.out.println("Carnet: 202401939");
                     }
-                    case 9 -> System.out.println("\u00a1Gracias por usar el programa!");
+                    case 9 -> System.out.println("Gracias por usar el programa!");
                     default -> System.out.println("Opción no válida.");
+                    case 10 -> System.out.println("Calificacion");
                 }
             } catch (Exception e) {
                 System.out.println("Entrada inválida. Intenta nuevamente.");
