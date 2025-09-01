@@ -21,6 +21,7 @@ public class Main {
             System.out.println("1. Agregar producto");
             System.out.println("2. Realizar venta");
             System.out.println("3. Eliminar producto");
+            System.out.println("4. Registrar venta");
             System.out.println("0. Salir");
             System.out.print("Ingrese una opción: ");
 
@@ -156,6 +157,85 @@ public class Main {
                         System.out.println("Producto eliminado con éxito.");
                     } else {
                         System.out.println("Eliminación cancelada.");
+                    }
+
+                    break;
+
+                case 4:
+                    System.out.println("\n--- Registrar Venta ---");
+
+                    if (totalProductos == 0) {
+                        System.out.println("No hay productos en el inventario para vender.");
+                        break;
+                    }
+
+                    System.out.print("Ingrese el código del producto: ");
+                    String codigoVenta = scanner.nextLine();
+
+                    Producto productoEncontrado = null;
+
+                    // Buscar el producto en el inventario
+                    for (int i = 0; i < totalProductos; i++) {
+                        if (inventario[i].getCodigo().equalsIgnoreCase(codigoVenta)) {
+                            productoEncontrado = inventario[i];
+                            break;
+                        }
+                    }
+
+                    // Validar existencia
+                    if (productoEncontrado == null) {
+                        System.out.println("El producto con ese código no existe.");
+                        break;
+                    }
+
+                    // Mostrar información del producto encontrado
+                    productoEncontrado.mostrarProducto();
+
+                    System.out.print("Ingrese la cantidad que desea vender: ");
+                    int cantidadVenta;
+
+                    try {
+                        cantidadVenta = Integer.parseInt(scanner.nextLine());
+
+                        if (cantidadVenta <= 0) {
+                            System.out.println("La cantidad debe ser positiva.");
+                            break;
+                        }
+
+                        // Validar stock suficiente
+                        if (productoEncontrado.getStock() < cantidadVenta) {
+                            System.out.println("No hay suficiente stock disponible.");
+                            break;
+                        }
+
+                    } catch (NumberFormatException e) {
+                        System.out.println("Cantidad inválida.");
+                        break;
+                    }
+
+                    // Calcular total
+                    double total = cantidadVenta * productoEncontrado.getPrecio();
+
+                    // Restar del stock
+                    productoEncontrado.setStock(productoEncontrado.getStock() - cantidadVenta);
+
+                    // Crear objeto Venta y almacenarlo
+                    Venta nuevaVenta = new Venta(codigoVenta, cantidadVenta, total);
+                    if (totalVentas < ventas.length) {
+                        ventas[totalVentas++] = nuevaVenta;
+                    }
+
+                    // Mostrar la venta en consola
+                    nuevaVenta.mostrarVenta();
+
+                    // Guardar en archivo de texto
+                    try {
+                        java.io.FileWriter writer = new java.io.FileWriter("registro_ventas.txt", true); // modo append
+                        writer.write(nuevaVenta.formatoParaArchivo() + "\n");
+                        writer.close();
+                        System.out.println("Venta registrada correctamente en archivo.");
+                    } catch (Exception e) {
+                        System.out.println("Error al guardar la venta en el archivo.");
                     }
 
                     break;
