@@ -20,9 +20,10 @@ public class Main {
             System.out.println("\n--- MENÚ PRINCIPAL ---");
             System.out.println("1. Agregar producto");
             System.out.println("2. Realizar venta");
+            System.out.println("3. Eliminar producto");
             System.out.println("0. Salir");
             System.out.print("Ingrese una opción: ");
-            opcion = Integer.parseInt(scanner.nextLine());
+
             try {
                 opcion = scanner.nextInt();
                 scanner.nextLine(); // Limpiar buffer
@@ -86,7 +87,7 @@ public class Main {
                     // Crear producto y agregarlo al inventario
                     inventario[totalProductos] = new Producto(codigo, nombre, categoria, precio, stock);
                     totalProductos++;
-                    System.out.println("Producto agregado con éxito.");;
+                    System.out.println("Producto agregado con éxito.");
                     break;
 
                 case 2:
@@ -116,6 +117,45 @@ public class Main {
                     // Si no se encontró ningún producto, se muestra un mensaje al usuario
                     if (!encontrado) {
                         System.out.println("No se encontró ningún producto que coincida con el criterio.");
+                    }
+                    break;
+
+                case 3:
+                    System.out.println("\n--- Eliminar Producto ---");
+
+                    // 1. Solicitar el código del producto
+                    System.out.print("Ingrese el código del producto a eliminar: ");
+                    String codigoEliminar = scanner.nextLine();
+
+                    // 2. Buscar el producto en el inventario
+                    int indiceEliminar = -1;
+                    for (int i = 0; i < totalProductos; i++) {
+                        if (inventario[i].getCodigo().equalsIgnoreCase(codigoEliminar)) {
+                            indiceEliminar = i;
+                            break;
+                        }
+                    }
+
+                    // 3. Si no se encuentra el producto
+                    if (indiceEliminar == -1) {
+                        System.out.println("Producto no encontrado.");
+                        break;
+                    }
+
+                    // 4. Confirmar la eliminación
+                    System.out.print("¿Está seguro que desea eliminar este producto? (s/n): ");
+                    String confirmacion = scanner.nextLine();
+
+                    if (confirmacion.equalsIgnoreCase("s")) {
+                        // 5. Desplazar elementos para eliminar el producto
+                        for (int i = indiceEliminar; i < totalProductos - 1; i++) {
+                            inventario[i] = inventario[i + 1];
+                        }
+                        inventario[totalProductos - 1] = null; // Limpia la última posición
+                        totalProductos--; // Reduce el contador total
+                        System.out.println("Producto eliminado con éxito.");
+                    } else {
+                        System.out.println("Eliminación cancelada.");
                     }
 
                     break;
