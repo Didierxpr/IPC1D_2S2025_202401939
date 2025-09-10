@@ -1,9 +1,12 @@
 package Proyecto1_IPC1;
 
 import java.util.Scanner;
-import Proyecto1_IPC1.Venta;
-import Proyecto1_IPC1.Producto;
-
+import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileNotFoundException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Main {
     static Venta[] ventas = new Venta[50]; // máximo 50 ventas
@@ -22,6 +25,9 @@ public class Main {
             System.out.println("2. Realizar venta");
             System.out.println("3. Eliminar producto");
             System.out.println("4. Registrar venta");
+            System.out.println("5. Bitacora");
+            System.out.println("6. Generacion de PDF's");
+            System.out.println("7. Mostrar datos de estudiante");
             System.out.println("0. Salir");
             System.out.print("Ingrese una opción: ");
 
@@ -33,6 +39,7 @@ public class Main {
                 case 1:
                     if (totalProductos >= MAX_PRODUCTOS) {
                         System.out.println("\nEl inventario está lleno. No se pueden agregar más productos.");
+                        Bitacora.registrar("Agregar producto", false, "Didiere");
                         break;
                     }
 
@@ -50,6 +57,7 @@ public class Main {
 
                     if (codigoExiste) {
                         System.out.println("Ya existe un producto con ese código.");
+                        Bitacora.registrar("Agregar producto", false, "Didiere");
                         break;
                     }
 
@@ -65,10 +73,12 @@ public class Main {
                         precio = Double.parseDouble(scanner.nextLine());
                         if (precio <= 0) {
                             System.out.println("El precio debe ser un valor positivo.");
+                            Bitacora.registrar("Agregar producto", false, "Didiere");
                             break;
                         }
                     } catch (NumberFormatException e) {
                         System.out.println("Precio inválido.");
+                        Bitacora.registrar("Agregar producto", false, "Didiere");
                         break;
                     }
 
@@ -78,10 +88,12 @@ public class Main {
                         stock = Integer.parseInt(scanner.nextLine());
                         if (stock < 0) {
                             System.out.println("La cantidad debe ser positiva.");
+                            Bitacora.registrar("Agregar producto", false, "Didiere");
                             break;
                         }
                     } catch (NumberFormatException e) {
                         System.out.println("Cantidad inválida.");
+                        Bitacora.registrar("Agregar producto", false, "Didiere");
                         break;
                     }
 
@@ -89,6 +101,7 @@ public class Main {
                     inventario[totalProductos] = new Producto(codigo, nombre, categoria, precio, stock);
                     totalProductos++;
                     System.out.println("Producto agregado con éxito.");
+                    Bitacora.registrar("Agregar producto", true, "Didiere");
                     break;
 
                 case 2:
@@ -119,11 +132,12 @@ public class Main {
                     if (!encontrado) {
                         System.out.println("No se encontró ningún producto que coincida con el criterio.");
                     }
+                    Bitacora.registrar("Búsqueda de producto", encontrado, "Didiere");
                     break;
 
                 case 3:
                     System.out.println("\n--- Eliminar Producto ---");
-
+                    boolean eliminado = false;
                     // 1. Solicitar el código del producto
                     System.out.print("Ingrese el código del producto a eliminar: ");
                     String codigoEliminar = scanner.nextLine();
@@ -154,16 +168,18 @@ public class Main {
                         }
                         inventario[totalProductos - 1] = null; // Limpia la última posición
                         totalProductos--; // Reduce el contador total
+                        eliminado = true;
                         System.out.println("Producto eliminado con éxito.");
                     } else {
                         System.out.println("Eliminación cancelada.");
                     }
+                    Bitacora.registrar("Eliminación de producto", eliminado, "Didiere");
 
                     break;
 
                 case 4:
                     System.out.println("\n--- Registrar Venta ---");
-
+                    boolean ventaExitosa = false;
                     if (totalProductos == 0) {
                         System.out.println("No hay productos en el inventario para vender.");
                         break;
@@ -234,10 +250,85 @@ public class Main {
                         writer.write(nuevaVenta.formatoParaArchivo() + "\n");
                         writer.close();
                         System.out.println("Venta registrada correctamente en archivo.");
+                        ventaExitosa = true;
                     } catch (Exception e) {
                         System.out.println("Error al guardar la venta en el archivo.");
                     }
+                    Bitacora.registrar("Venta", ventaExitosa, "Didiere");
 
+                    break;
+                case 5:
+                    System.out.println("\n--- BITÁCORA DE ACCIONES ---\n");
+                    try (BufferedReader reader = new BufferedReader(new FileReader("bitacora.txt"))) {
+                        String linea;
+                        boolean hayContenido = false;
+
+                        while ((linea = reader.readLine()) != null) {
+                            System.out.println(linea);
+                            hayContenido = true;
+                        }
+
+                        if (!hayContenido) {
+                            System.out.println("La bitácora está vacía.");
+                        }
+                    } catch (FileNotFoundException e) {
+                        System.out.println("La bitácora no existe todavía.");
+                    } catch (IOException e) {
+                        System.out.println("Error al leer la bitácora.");
+                    }
+                    break;
+                case 6:
+                    System.out.println("\n--- GENERACIÓN DE REPORTES ---");
+                    System.out.println("1. Reporte de Stock");
+                    System.out.println("2. Reporte de Ventas");
+                    System.out.print("Seleccione una opción: ");
+                    String opcionReporte = scanner.nextLine();
+
+                    // Obtener fecha y hora actual
+                    LocalDateTime ahora = LocalDateTime.now();
+                    DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd_MM_yyyy_HH_mm_ss");
+
+                    switch (opcionReporte) {
+                        case "1":
+                            try {
+                                // Generar nombre dinámico para el archivo de stock
+                                String nombreArchivo = formato.format(ahora) + "_Stock.pdf";
+
+                                ReportePDF.generarReporteStock(inventario, totalProductos, nombreArchivo); // genera el pdf
+                                System.out.println("Reporte de stock generado exitosamente.");
+                                Bitacora.registrar("Generación de reporte de stock", true, "Didiere");
+                            } catch (Exception e) {
+                                System.out.println("Error al generar el reporte de stock.");
+                                Bitacora.registrar("Generación de reporte de stock", false, "Didiere");
+                            }
+                            break;
+
+                        case "2":
+                            try {
+                                // Generar nombre dinámico para el archivo de ventas
+                                String nombreArchivo = formato.format(ahora) + "_Venta.pdf";
+
+                                ReportePDF.generarReporteVentas(ventas, totalVentas, nombreArchivo); // genera el pdf
+                                System.out.println("Reporte de ventas generado exitosamente.");
+                                Bitacora.registrar("Generación de reporte de ventas", true, "Didiere");
+                            } catch (Exception e) {
+                                System.out.println("Error al generar el reporte de ventas.");
+                                Bitacora.registrar("Generación de reporte de ventas", false, "Didiere");
+                            }
+                            break;
+
+                        default:
+                            System.out.println("Opción inválida.");
+                            break;
+                    }
+                    break;
+
+                case 7: // muestra los datos del estudiante
+                    System.out.println("\n--- DATOS DEL ESTUDIANTE ---");
+                    System.out.println("Nombre: Carlos Didiere Cabrera Rodriguez");
+                    System.out.println("ID Estudiante: 202401939");
+                    System.out.println("Proyecto: Sistema de Inventario con Reportes PDF");
+                    Bitacora.registrar("Visualización de datos del estudiante", true, "Didiere");
                     break;
 
                 case 0:
