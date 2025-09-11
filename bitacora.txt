@@ -1,0 +1,26 @@
+[2025-09-10 18:42:50] Acción: Agregar producto | Estado: Correcta | Usuario: Didiere
+[2025-09-10 18:43:02] Acción: Agregar producto | Estado: Errónea | Usuario: Didiere
+[2025-09-10 18:43:20] Acción: Agregar producto | Estado: Correcta | Usuario: Didiere
+[2025-09-10 18:43:29] Acción: Búsqueda de producto | Estado: Correcta | Usuario: Didiere
+[2025-09-10 18:45:15] Acción: Agregar producto | Estado: Correcta | Usuario: Didiere
+[2025-09-10 18:45:19] Acción: Búsqueda de producto | Estado: Correcta | Usuario: Didiere
+[2025-09-10 18:45:23] Acción: Búsqueda de producto | Estado: Correcta | Usuario: Didiere
+[2025-09-10 18:45:39] Acción: Venta | Estado: Correcta | Usuario: Didiere
+[2025-09-10 18:45:46] Acción: Búsqueda de producto | Estado: Correcta | Usuario: Didiere
+[2025-09-10 18:45:54] Acción: Eliminación de producto | Estado: Correcta | Usuario: Didiere
+[2025-09-10 18:45:57] Acción: Búsqueda de producto | Estado: Errónea | Usuario: Didiere
+[2025-09-10 18:46:11] Acción: Agregar producto | Estado: Correcta | Usuario: Didiere
+[2025-09-10 18:46:23] Acción: Venta | Estado: Correcta | Usuario: Didiere
+[2025-09-10 18:46:26] Acción: Búsqueda de producto | Estado: Correcta | Usuario: Didiere
+[2025-09-10 18:48:01] Acción: Agregar producto | Estado: Correcta | Usuario: Didiere
+[2025-09-10 18:48:05] Acción: Búsqueda de producto | Estado: Correcta | Usuario: Didiere
+[2025-09-10 18:48:10] Acción: Búsqueda de producto | Estado: Errónea | Usuario: Didiere
+[2025-09-10 18:48:19] Acción: Búsqueda de producto | Estado: Correcta | Usuario: Didiere
+[2025-09-10 18:57:34] Acción: Agregar producto | Estado: Correcta | Usuario: Didiere
+[2025-09-10 18:57:38] Acción: Búsqueda de producto | Estado: Errónea | Usuario: Didiere
+[2025-09-10 18:57:41] Acción: Búsqueda de producto | Estado: Correcta | Usuario: Didiere
+[2025-09-10 18:57:49] Acción: Búsqueda de producto | Estado: Correcta | Usuario: Didiere
+[2025-09-10 18:58:06] Acción: Venta | Estado: Correcta | Usuario: Didiere
+[2025-09-10 18:58:12] Acción: Búsqueda de producto | Estado: Correcta | Usuario: Didiere
+[2025-09-10 18:58:31] Acción: Visualización de datos del estudiante | Estado: Correcta | Usuario: Didiere
+[2025-09-10 18:58:40] Acción: Eliminación de producto | Estado: Correcta | Usuario: Didiere

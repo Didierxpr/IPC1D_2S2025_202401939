@@ -22,7 +22,7 @@ public class Main {
         do {
             System.out.println("\n--- MENÚ PRINCIPAL ---");
             System.out.println("1. Agregar producto");
-            System.out.println("2. Realizar venta");
+            System.out.println("2. Buscar producto");
             System.out.println("3. Eliminar producto");
             System.out.println("4. Registrar venta");
             System.out.println("5. Bitacora");
@@ -111,27 +111,29 @@ public class Main {
                     System.out.print("Ingrese el criterio de búsqueda (nombre, categoría o código): ");
                     String criterio = scanner.nextLine().toLowerCase();  // Convertimos a minúsculas para hacer la búsqueda más flexible
 
-                    boolean encontrado = false; // metodo para saber si al menos un producto fue encontrado
+                    boolean encontrado = false; // Para saber si al menos un producto fue encontrado
 
                     // Recorremos el inventario actual
                     for (int i = 0; i < totalProductos; i++) {
                         Producto p = inventario[i];  // Accedemos al producto en la posición i
 
-                        // Convertimos los atributos del producto a minúsculas y comparamos si alguno contiene el criterio
-                        if (p.getNombre().toLowerCase().contains(criterio) ||
-                                p.getCategoria().toLowerCase().contains(criterio) ||
-                                p.getCodigo().toLowerCase().contains(criterio)) {
+                        // Comprobamos coincidencia parcial en nombre/categoría y exacta en código
+                        boolean coincide =
+                                p.getNombre().toLowerCase().contains(criterio) ||
+                                        p.getCategoria().toLowerCase().contains(criterio) ||
+                                        p.getCodigo().toLowerCase().equals(criterio);  // búsqueda exacta solo para código
 
-                            // Si encontramos coincidencia, mostramos los datos del producto
+                        if (coincide) {
                             p.mostrarProducto();
                             encontrado = true;
                         }
                     }
 
-                    // Si no se encontró ningún producto, se muestra un mensaje al usuario
                     if (!encontrado) {
-                        System.out.println("No se encontró ningún producto que coincida con el criterio.");
+                        System.out.println("No se encontraron productos que coincidan con el criterio proporcionado.");
                     }
+
+                    // Registrar en bitácora si fue exitosa o no la búsqueda
                     Bitacora.registrar("Búsqueda de producto", encontrado, "Didiere");
                     break;
 
