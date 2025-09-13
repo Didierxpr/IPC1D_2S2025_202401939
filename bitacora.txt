@@ -24,3 +24,10 @@
 [2025-09-10 18:58:12] Acción: Búsqueda de producto | Estado: Correcta | Usuario: Didiere
 [2025-09-10 18:58:31] Acción: Visualización de datos del estudiante | Estado: Correcta | Usuario: Didiere
 [2025-09-10 18:58:40] Acción: Eliminación de producto | Estado: Correcta | Usuario: Didiere
+[2025-09-12 18:03:25] Acción: Agregar producto | Estado: Correcta | Usuario: Didiere
+[2025-09-12 18:06:18] Acción: Búsqueda de producto | Estado: Correcta | Usuario: Didiere
+[2025-09-12 18:07:57] Acción: Eliminación de producto | Estado: Correcta | Usuario: Didiere
+[2025-09-12 18:09:42] Acción: Agregar producto | Estado: Correcta | Usuario: Didiere
+[2025-09-12 18:09:54] Acción: Venta | Estado: Correcta | Usuario: Didiere
+[2025-09-12 18:12:34] Acción: Generación de reporte de stock | Estado: Correcta | Usuario: Didiere
+[2025-09-12 18:16:11] Acción: Visualización de datos del estudiante | Estado: Correcta | Usuario: Didiere
