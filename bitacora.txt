@@ -31,3 +31,15 @@
 [2025-09-12 18:09:54] Acción: Venta | Estado: Correcta | Usuario: Didiere
 [2025-09-12 18:12:34] Acción: Generación de reporte de stock | Estado: Correcta | Usuario: Didiere
 [2025-09-12 18:16:11] Acción: Visualización de datos del estudiante | Estado: Correcta | Usuario: Didiere
+[2025-09-12 22:52:42] Acción: Agregar producto | Estado: Correcta | Usuario: Didiere
+[2025-09-12 22:52:59] Acción: Venta | Estado: Correcta | Usuario: Didiere
+[2025-09-12 22:53:10] Acción: Agregar producto | Estado: Errónea | Usuario: Didiere
+[2025-09-12 22:53:34] Acción: Agregar producto | Estado: Correcta | Usuario: Didiere
+[2025-09-12 22:53:40] Acción: Búsqueda de producto | Estado: Errónea | Usuario: Didiere
+[2025-09-12 22:53:43] Acción: Búsqueda de producto | Estado: Correcta | Usuario: Didiere
+[2025-09-12 22:53:57] Acción: Venta | Estado: Correcta | Usuario: Didiere
+[2025-09-12 22:54:06] Acción: Generación de reporte de ventas | Estado: Correcta | Usuario: Didiere
+[2025-09-12 22:59:32] Acción: Búsqueda de producto | Estado: Errónea | Usuario: Didiere
+[2025-09-12 22:59:41] Acción: Agregar producto | Estado: Correcta | Usuario: Didiere
+[2025-09-12 22:59:45] Acción: Búsqueda de producto | Estado: Errónea | Usuario: Didiere
+[2025-09-12 22:59:47] Acción: Búsqueda de producto | Estado: Correcta | Usuario: Didiere

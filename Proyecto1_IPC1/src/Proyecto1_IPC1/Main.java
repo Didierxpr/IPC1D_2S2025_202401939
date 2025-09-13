@@ -119,9 +119,10 @@ public class Main {
 
                         // Comprobamos coincidencia parcial en nombre/categoría y exacta en código
                         boolean coincide =
-                                p.getNombre().toLowerCase().contains(criterio) ||
-                                        p.getCategoria().toLowerCase().contains(criterio) ||
-                                        p.getCodigo().toLowerCase().equals(criterio);  // búsqueda exacta solo para código
+
+                            p.getNombre().toLowerCase().contains(criterio) ||
+                                    p.getCategoria().toLowerCase().contains(criterio) ||
+                                    p.getCodigo().toLowerCase().equals(criterio);  // búsqueda exacta solo para código
 
                         if (coincide) {
                             p.mostrarProducto();
