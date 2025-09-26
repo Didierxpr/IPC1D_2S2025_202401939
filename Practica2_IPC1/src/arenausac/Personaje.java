@@ -1,4 +1,4 @@
-package ArenaUSAC;
+package arenausac;
 
 import java.util.Random;
 

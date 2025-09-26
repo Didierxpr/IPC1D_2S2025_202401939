@@ -1,4 +1,4 @@
-package ArenaUSAC;
+package arenausac;
 
 public class Historial {
     // =========================
@@ -29,11 +29,11 @@ public class Historial {
         }
     }
 
-    // Mostrar todas las batallas
+    // Mostrar todas las batallas registradas
     public void mostrarHistorial() {
         System.out.println("\n=== HISTORIAL DE BATALLAS ===");
         if (contador == 0) {
-            System.out.println("No hay batallas registradas.");
+            System.out.println("⚠️ No hay batallas registradas.");
             return;
         }
 
@@ -64,8 +64,20 @@ public class Historial {
         }
 
         if (!encontrado) {
-            System.out.println("No se encontraron batallas para el personaje " + nombre);
+            System.out.println("⚠️ No se encontraron batallas para el personaje " + nombre);
         }
+    }
+
+    // Mostrar bitácora completa de una batalla por ID
+    public void mostrarBitacoraBatalla(int idBatalla) {
+        for (int i = 0; i < contador; i++) {
+            Batalla b = batallas[i];
+            if (b.getIdBatalla() == idBatalla) {
+                b.mostrarBitacora();
+                return;
+            }
+        }
+        System.out.println("⚠️ No se encontró la batalla con ID " + idBatalla);
     }
 
     // =========================
