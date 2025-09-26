@@ -65,23 +65,40 @@ public class arenausac {
         System.out.println("✅ Personaje " + p.getNombre() + " modificado con éxito.");
     }
 
-    public void eliminarPersonaje(int id) {
+    // Eliminar personaje por ID o nombre
+    public void eliminarPersonaje(String criterio) {
         int pos = -1;
-        for (int i = 0; i < contadorPersonajes; i++) {
-            if (personajes[i].getId() == id) {
-                pos = i;
-                break;
+        Personaje personajeAEliminar = null;
+
+        // Verificar si el criterio es un número (ID) o texto (nombre)
+        try {
+            int id = Integer.parseInt(criterio); // intenta convertir a número
+            for (int i = 0; i < contadorPersonajes; i++) {
+                if (personajes[i].getId() == id) {
+                    pos = i;
+                    personajeAEliminar = personajes[i];
+                    break;
+                }
+            }
+        } catch (NumberFormatException e) {
+            // Si no es número, se busca por nombre
+            for (int i = 0; i < contadorPersonajes; i++) {
+                if (personajes[i].getNombre().equalsIgnoreCase(criterio)) {
+                    pos = i;
+                    personajeAEliminar = personajes[i];
+                    break;
+                }
             }
         }
 
-        if (pos == -1) {
-            System.out.println("⚠️ No se encontró personaje con ID " + id);
+        if (pos == -1 || personajeAEliminar == null) {
+            System.out.println("⚠️ No se encontró personaje con el criterio: " + criterio);
             return;
         }
 
-        String nombre = personajes[pos].getNombre();
+        String nombre = personajeAEliminar.getNombre();
 
-        // Reajustar el vector
+        // Reajustar el vector para eliminar
         for (int i = pos; i < contadorPersonajes - 1; i++) {
             personajes[i] = personajes[i + 1];
         }
@@ -90,6 +107,7 @@ public class arenausac {
 
         System.out.println("🗑️ Personaje eliminado: " + nombre);
     }
+
 
     public void mostrarPersonajes() {
         System.out.println("\n=== LISTA DE PERSONAJES ===");
