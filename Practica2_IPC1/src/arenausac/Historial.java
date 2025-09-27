@@ -22,8 +22,7 @@ public class Historial {
     // Agregar batalla al historial
     public void agregarBatalla(Batalla b) {
         if (contador < batallas.length) {
-            batallas[contador] = b;
-            contador++;
+            batallas[contador++] = b;
         } else {
             System.out.println("⚠️ No se pueden registrar más batallas, el historial está lleno.");
         }
@@ -36,14 +35,15 @@ public class Historial {
             System.out.println("⚠️ No hay batallas registradas.");
             return;
         }
-
         for (int i = 0; i < contador; i++) {
             Batalla b = batallas[i];
-            System.out.println("Batalla #" + b.getIdBatalla() +
-                    " | Fecha: " + b.getFechaHora() +
-                    " | " + b.getJugador1().getNombre() +
-                    " VS " + b.getJugador2().getNombre() +
-                    " | Ganador: " + b.getGanador());
+            if (b != null) {
+                System.out.println("Batalla #" + b.getIdBatalla() +
+                        " | Fecha: " + b.getFechaHora() +
+                        " | " + b.getJugador1().getNombre() +
+                        " VS " + b.getJugador2().getNombre() +
+                        " | Ganador: " + b.getGanador());
+            }
         }
     }
 
@@ -54,8 +54,10 @@ public class Historial {
 
         for (int i = 0; i < contador; i++) {
             Batalla b = batallas[i];
-            if (b.getJugador1().getNombre().equalsIgnoreCase(nombre) ||
-                    b.getJugador2().getNombre().equalsIgnoreCase(nombre)) {
+            if (b != null && (
+                    b.getJugador1().getNombre().equalsIgnoreCase(nombre) ||
+                            b.getJugador2().getNombre().equalsIgnoreCase(nombre)
+            )) {
                 System.out.println("Batalla #" + b.getIdBatalla() +
                         " | Fecha: " + b.getFechaHora() +
                         " | Ganador: " + b.getGanador());
@@ -70,14 +72,45 @@ public class Historial {
 
     // Mostrar bitácora completa de una batalla por ID
     public void mostrarBitacoraBatalla(int idBatalla) {
+        Batalla b = buscarPorId(idBatalla);
+        if (b != null) {
+            b.mostrarBitacora();
+        } else {
+            System.out.println("⚠️ No se encontró la batalla con ID " + idBatalla);
+        }
+    }
+
+    // =========================
+    // Utilidades opcionales
+    // =========================
+
+    public boolean estaLleno() {
+        return contador >= batallas.length;
+    }
+
+    public boolean estaVacio() {
+        return contador == 0;
+    }
+
+    public Batalla buscarPorId(int idBatalla) {
         for (int i = 0; i < contador; i++) {
             Batalla b = batallas[i];
-            if (b.getIdBatalla() == idBatalla) {
-                b.mostrarBitacora();
-                return;
+            if (b != null && b.getIdBatalla() == idBatalla) {
+                return b;
             }
         }
-        System.out.println("⚠️ No se encontró la batalla con ID " + idBatalla);
+        return null;
+    }
+
+    public Batalla getBatallaEn(int idx) {
+        if (idx < 0 || idx >= contador) return null;
+        return batallas[idx];
+    }
+
+    /** Reinicia el historial (útil antes de cargar estado desde archivo). */
+    public void limpiar() {
+        for (int i = 0; i < contador; i++) batallas[i] = null;
+        contador = 0;
     }
 
     // =========================

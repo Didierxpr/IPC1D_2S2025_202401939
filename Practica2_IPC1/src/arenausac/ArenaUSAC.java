@@ -1,10 +1,10 @@
 package arenausac;
 
 import java.io.BufferedReader;  // lee archivo linea por linea
-import java.io.FileReader;  // para abrir archivo en modo lectura
-import java.io.FileWriter;  // para abrir archivo en modo escritura
-import java.io.IOException; // para escribir texto de forma sencilla en el archivo.
-import java.io.PrintWriter; // para manejar errores de entrada/salida.
+import java.io.FileReader;      // abrir archivo en modo lectura
+import java.io.FileWriter;      // abrir archivo en modo escritura
+import java.io.IOException;     // manejar errores de E/S
+import java.io.PrintWriter;     // escribir texto fácilmente
 
 public class ArenaUSAC {
     // =========================
@@ -127,7 +127,7 @@ public class ArenaUSAC {
     }
 
     // =========================
-    // Batallas
+    // Batallas (Consola)
     // =========================
     public void simularBatalla(int id1, int id2) {
         Personaje p1 = buscarPorId(id1);
@@ -141,8 +141,38 @@ public class ArenaUSAC {
             System.out.println("⚠️ Ambos personajes deben estar vivos para pelear.");
             return;
         }
+        if (p1.getId() == p2.getId()) {
+            System.out.println("⚠️ Debe elegir personajes distintos.");
+            return;
+        }
 
         Batalla b = new Batalla(historial.getContador() + 1, p1, p2);
+        b.iniciarBatalla();
+        historial.agregarBatalla(b);
+    }
+
+    // =========================
+    // Batallas (GUI) - Sobrecarga con listener
+    // =========================
+    public void simularBatalla(int id1, int id2, BitacoraListener listener) {
+        Personaje p1 = buscarPorId(id1);
+        Personaje p2 = buscarPorId(id2);
+
+        if (p1 == null || p2 == null) {
+            System.out.println("⚠️ Uno o ambos personajes no existen.");
+            return;
+        }
+        if (!p1.estaVivo() || !p2.estaVivo()) {
+            System.out.println("⚠️ Ambos personajes deben estar vivos para pelear.");
+            return;
+        }
+        if (p1.getId() == p2.getId()) {
+            System.out.println("⚠️ Debe elegir personajes distintos.");
+            return;
+        }
+
+        Batalla b = new Batalla(historial.getContador() + 1, p1, p2);
+        b.setListener(listener);   // 🔗 Conectar con GUI
         b.iniciarBatalla();
         historial.agregarBatalla(b);
     }
@@ -168,7 +198,7 @@ public class ArenaUSAC {
         return null;
     }
 
-    // metodo centralizado
+    // Método centralizado (ID o nombre)
     public Personaje buscar(String criterio) {
         try {
             int id = Integer.parseInt(criterio); // Si es número → buscar por ID
@@ -188,15 +218,17 @@ public class ArenaUSAC {
     public void buscarBatallasDePersonaje(String nombre) {
         historial.buscarPorPersonaje(nombre);
     }
+
     // =========================
-// Guardar estado en archivo
-// =========================
+    // Guardar estado en archivo
+    // =========================
     public void guardarEstado(String archivo) {
         try (PrintWriter pw = new PrintWriter(new FileWriter(archivo))) {
             pw.println("=== PERSONAJES ===");
             for (int i = 0; i < contadorPersonajes; i++) {
                 Personaje p = personajes[i];
                 if (p != null) {
+                    // Formato: id;nombre;arma;hp;ataque;defensa;agilidad;velocidad
                     pw.println(p.getId() + ";" + p.getNombre() + ";" + p.getArma() + ";" +
                             p.getHp() + ";" + p.getAtaque() + ";" + p.getDefensa() + ";" +
                             p.getAgilidad() + ";" + p.getVelocidad());
@@ -220,11 +252,21 @@ public class ArenaUSAC {
     }
 
     // =========================
-// Cargar estado desde archivo
-// =========================
+    // Cargar estado desde archivo
+    // =========================
     public void cargarEstado(String archivo) {
         int personajesCargados = 0;
         int batallasCargadas = 0;
+
+        // 🔄 Reiniciar estructuras (opcional pero recomendado)
+        this.contadorPersonajes = 0;
+        for (int i = 0; i < personajes.length; i++) personajes[i] = null;
+
+        // Re-crear historial con misma capacidad
+        int capacidadHistorial = this.historial.getBatallas().length;
+        this.historial = new Historial(capacidadHistorial);
+
+        int maxId = 0; // para recalcular nextId
 
         try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
             String linea;
@@ -242,7 +284,9 @@ public class ArenaUSAC {
                     continue;
                 }
 
-                if (leyendoPersonajes && !linea.trim().isEmpty()) {
+                if (linea.trim().isEmpty()) continue;
+
+                if (leyendoPersonajes) {
                     String[] datos = linea.split(";");
                     int id = Integer.parseInt(datos[0]);
                     String nombre = datos[1];
@@ -253,12 +297,18 @@ public class ArenaUSAC {
                     int agilidad = Integer.parseInt(datos[6]);
                     int velocidad = Integer.parseInt(datos[7]);
 
-                    personajes[contadorPersonajes] = new Personaje(id, nombre, arma, hp, ataque, defensa, agilidad, velocidad);
-                    contadorPersonajes++;
-                    personajesCargados++;
+                    // ⚠️ Orden correcto según tu constructor usado en agregarPersonaje:
+                    // new Personaje(id, nombre, arma, hp, ataque, velocidad, agilidad, defensa)
+                    if (contadorPersonajes < personajes.length) {
+                        personajes[contadorPersonajes] =
+                                new Personaje(id, nombre, arma, hp, ataque, velocidad, agilidad, defensa);
+                        contadorPersonajes++;
+                        personajesCargados++;
+                        if (id > maxId) maxId = id;
+                    }
                 }
 
-                if (leyendoBatallas && !linea.trim().isEmpty()) {
+                if (leyendoBatallas) {
                     String[] datos = linea.split(";");
                     int idBatalla = Integer.parseInt(datos[0]);
                     String fecha = datos[1];
@@ -271,12 +321,16 @@ public class ArenaUSAC {
 
                     if (p1 != null && p2 != null) {
                         Batalla b = new Batalla(idBatalla, p1, p2);
-                        b.registrarEvento("Batalla cargada desde archivo");
+                        // Puedes registrar marcas para distinguir batallas cargadas
+                        b.registrarEvento("Batalla cargada desde archivo (" + fecha + ") - Ganador: " + ganador);
                         historial.agregarBatalla(b);
                         batallasCargadas++;
                     }
                 }
             }
+
+            // Ajustar nextId para futuros ingresos
+            this.nextId = (maxId > 0 ? maxId + 1 : this.nextId);
 
             System.out.println("✅ Estado cargado desde " + archivo);
             System.out.println("📌 Personajes restaurados: " + personajesCargados);
@@ -287,4 +341,24 @@ public class ArenaUSAC {
         }
     }
 
+    // =========================
+    // Getters de apoyo para la GUI
+    // =========================
+    public int getCantidadPersonajes() {
+        return contadorPersonajes;
+    }
+
+    public Personaje getPersonajeEn(int idx) {
+        if (idx < 0 || idx >= contadorPersonajes) return null;
+        return personajes[idx];
+    }
+
+    public String[] getNombresPersonajes() {
+        String[] nombres = new String[contadorPersonajes];
+        for (int i = 0; i < contadorPersonajes; i++) {
+            nombres[i] = personajes[i].getNombre();
+        }
+        return nombres;
+    }
 }
+
