@@ -82,6 +82,8 @@ public class MainWindow extends JFrame {
         JButton btnEliminar = new JButton("Eliminar");
         JButton btnBuscar = new JButton("Buscar");
         JButton btnActualizarTabla = new JButton("Actualizar");
+        JButton btnSalir = new JButton("Salir");
+        btnSalir.addActionListener(e -> System.exit(0));
 
         JPanel acciones = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 8));
         acciones.add(btnAgregar);
@@ -89,6 +91,7 @@ public class MainWindow extends JFrame {
         acciones.add(btnEliminar);
         acciones.add(btnBuscar);
         acciones.add(btnActualizarTabla);
+        acciones.add(btnSalir);
 
         JPanel sur = new JPanel(new BorderLayout());
         sur.add(form, BorderLayout.CENTER);
@@ -116,25 +119,18 @@ public class MainWindow extends JFrame {
         });
 
         btnModificar.addActionListener(e -> {
-            String criterio = JOptionPane.showInputDialog(this, "ID o Nombre del personaje a modificar:");
-            if (criterio == null || criterio.isEmpty()) return;
-            Personaje p = arena.buscar(criterio);
-            if (p == null) {
-                JOptionPane.showMessageDialog(this, "Personaje no encontrado.", "Aviso", JOptionPane.WARNING_MESSAGE);
-                return;
+            String criterio = JOptionPane.showInputDialog(this, "Ingrese ID o nombre del personaje a modificar:");
+            if (criterio != null && !criterio.isEmpty()) {
+                Personaje p = arena.buscar(criterio); // tu método ya acepta ID o nombre
+                if (p != null) {
+                    new ModificarPersonajeWindow(arena, p).setVisible(true);
+                } else {
+                    JOptionPane.showMessageDialog(this, "⚠️ No se encontró ningún personaje con ese criterio.");
+                }
             }
-            // tomar valores actuales del form como nuevos valores
-            String arma = tfArma.getText().trim();
-            if (arma.isEmpty()) arma = p.getArma();
-            int hp = (Integer) spHP.getValue();
-            int atk = (Integer) spAtaque.getValue();
-            int def = (Integer) spDefensa.getValue();
-            int agi = (Integer) spAgilidad.getValue();
-            int vel = (Integer) spVelocidad.getValue();
-
-            arena.modificarPersonaje(p.getId(), arma, hp, atk, vel, agi, def);
-            refrescarTablaPersonajes();
         });
+
+
 
         btnEliminar.addActionListener(e -> {
             String criterio = JOptionPane.showInputDialog(this, "ID o Nombre del personaje a eliminar:");
@@ -226,12 +222,12 @@ public class MainWindow extends JFrame {
 
         // Usar tu flujo existente
         Batalla b = new Batalla(arena.getHistorial().getContador() + 1, p1, p2);
-        b.setListener(ventana);   // <- aqui conectas GUI
+        b.setListener(ventana);
         b.iniciarBatalla();
         arena.getHistorial().agregarBatalla(b);
 
         refrescarHistorial();
-        refrescarTablaPersonajes(); // por si cambió HP/estado
+        refrescarTablaPersonajes();
     }
 
     /* =========================
@@ -325,7 +321,7 @@ public class MainWindow extends JFrame {
         p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
         p.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         p.add(new JLabel("Universidad de San Carlos de Guatemala"));
-        p.add(new JLabel("Facultad de Ingeniería - E.C.S."));
+        p.add(new JLabel("Facultad de Ingeniería"));
         p.add(new JLabel("Curso: Laboratorio IPC1"));
         p.add(new JLabel("Práctica 2"));
         p.add(Box.createVerticalStrut(12));
