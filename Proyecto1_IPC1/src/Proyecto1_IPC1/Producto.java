@@ -39,7 +39,7 @@ public class Producto {
         return stock;
     }
 
-    // Setters (si necesitas modificar valores)
+    // Setters (si se necesita modificar valores)
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }

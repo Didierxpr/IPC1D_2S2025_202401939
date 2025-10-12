@@ -28,6 +28,7 @@ public class Main {
             System.out.println("5. Bitacora");
             System.out.println("6. Generacion de PDF's");
             System.out.println("7. Mostrar datos de estudiante");
+            System.out.println("8. hacer suma de dos numeros");
             System.out.println("0. Salir");
             System.out.print("Ingrese una opción: ");
 
@@ -333,6 +334,18 @@ public class Main {
                     System.out.println("Proyecto: Sistema de Inventario con Reportes PDF");
                     Bitacora.registrar("Visualización de datos del estudiante", true, "Didiere");
                     break;
+
+                case 8:
+                    Scanner sc8 = new Scanner(System.in);
+
+                    System.out.println("Ingrese el primer numero");
+                    int n1 = sc8.nextInt();
+
+                    System.out.println("Ingrese el segundo numero");
+                    int n2 = sc8.nextInt();
+
+                    int suma = n1 + n2;
+                    System.out.println("La suma de los numeros es:"+ suma);
 
                 case 0:
                     System.out.println("Saliendo del programa...");

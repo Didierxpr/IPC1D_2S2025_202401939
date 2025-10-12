@@ -84,6 +84,10 @@ public class MainWindow extends JFrame {
         JButton btnActualizarTabla = new JButton("Actualizar");
         JButton btnSalir = new JButton("Salir");
         btnSalir.addActionListener(e -> System.exit(0));
+        JButton btnDatos = new  JButton("Datos");
+        btnDatos.addActionListener(e -> {
+            System.out.println("Carlos Didiere Cabrera Rodriguez");
+        });
 
         JPanel acciones = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 8));
         acciones.add(btnAgregar);
@@ -92,6 +96,7 @@ public class MainWindow extends JFrame {
         acciones.add(btnBuscar);
         acciones.add(btnActualizarTabla);
         acciones.add(btnSalir);
+        acciones.add(btnDatos);
 
         JPanel sur = new JPanel(new BorderLayout());
         sur.add(form, BorderLayout.CENTER);
@@ -111,6 +116,37 @@ public class MainWindow extends JFrame {
 
             if (nombre.isEmpty() || arma.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Nombre y arma son obligatorios.", "Aviso", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            // Validar rangos
+            if (hp < 100 || hp > 500) {
+                JOptionPane.showMessageDialog(null,
+                        "El HP debe estar entre 100 y 500.",
+                        "Aviso", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            if (atk < 10 || atk > 100) {
+                JOptionPane.showMessageDialog(null,
+                        "El Ataque debe estar entre 10 y 100.",
+                        "Aviso", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            if (def < 1 || def > 50) {
+                JOptionPane.showMessageDialog(null,
+                        "La Defensa debe estar entre 1 y 50.",
+                        "Aviso", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            if (agi < 1 || agi > 10) {
+                JOptionPane.showMessageDialog(null,
+                        "La Agilidad debe estar entre 1 y 10.",
+                        "Aviso", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            if (vel < 1 || vel > 10) {
+                JOptionPane.showMessageDialog(null,
+                        "La Velocidad debe estar entre 1 y 10.",
+                        "Aviso", JOptionPane.WARNING_MESSAGE);
                 return;
             }
             arena.agregarPersonaje(nombre, arma, hp, atk, vel, agi, def);

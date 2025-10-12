@@ -70,11 +70,11 @@ public class ModificarPersonajeWindow extends JFrame {
 
             // ===== Validaciones de rangos =====
             if (hp <= 0 || hp > MAX_HP) {
-                JOptionPane.showMessageDialog(this, "⚠️ El HP debe estar entre 1 y " + MAX_HP);
+                JOptionPane.showMessageDialog(this, "⚠️ El HP debe estar entre 100 y " + MAX_HP);
                 return;
             }
             if (ataque <= 0 || ataque > MAX_ATAQUE) {
-                JOptionPane.showMessageDialog(this, "⚠️ El Ataque debe estar entre 1 y " + MAX_ATAQUE);
+                JOptionPane.showMessageDialog(this, "⚠️ El Ataque debe estar entre 10 y " + MAX_ATAQUE);
                 return;
             }
             if (velocidad <= 0 || velocidad > MAX_VELOCIDAD) {

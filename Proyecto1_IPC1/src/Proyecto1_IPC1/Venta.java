@@ -29,7 +29,7 @@ public class Venta {
         System.out.println("Fecha y hora: " + fechaHora);
     }
 
-    // Para guardar en archivo
+    // Para guardar en archivo pdf
     public String formatoParaArchivo() {
         return codigoProducto + "," + cantidadVendida + "," + totalVenta + "," + fechaHora;
     }

@@ -8,16 +8,16 @@ public class Personaje implements Runnable {
     private String nombre;
     private String arma;
 
-    private int hp;         // 100–500 recomendado
-    private int ataque;     // 10–100 recomendado
+    private int hp;         // 100–500
+    private int ataque;     // 10–100
     private int velocidad;  // 1–10 (turnos por segundo = 1000/velocidad)
-    private int agilidad;   // 1–10 (prob. esquiva ~ agilidad/10)
+    private int agilidad;   // 1–10 (prob. esquivar ~ agilidad/10)
     private int defensa;    // 1–50
 
     // En combate
     private Personaje oponente;
 
-    // Callback para GUI/bitácora (opcional)
+    // Callback para GUI/bitácora
     private BitacoraListener listener;
 
     // =========================
@@ -132,7 +132,5 @@ public class Personaje implements Runnable {
     public void setAgilidad(int agilidad) { this.agilidad = agilidad; }
     public void setDefensa(int defensa) { this.defensa = defensa; }
 
-    // (Opcional) Validaciones de rango si quieres reforzar:
-    // private int clamp(int v, int min, int max){ return Math.max(min, Math.min(max, v)); }
-    // y usarlas en setters para hp/ataque/velocidad/agilidad/defensa.
+
 }

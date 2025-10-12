@@ -5,8 +5,17 @@ import java.io.FileReader;      // abrir archivo en modo lectura
 import java.io.FileWriter;      // abrir archivo en modo escritura
 import java.io.IOException;     // manejar errores de E/S
 import java.io.PrintWriter;     // escribir texto fácilmente
+import javax.swing.JOptionPane;
+
 
 public class ArenaUSAC {
+    // Límites de atributos
+    private static final int MIN_HP = 100, MAX_HP = 500;
+    private static final int MIN_ATQ = 10,  MAX_ATQ = 100;
+    private static final int MIN_DEF = 1,   MAX_DEF = 50;
+    private static final int MIN_AGI = 1,   MAX_AGI = 10;
+    private static final int MIN_VEL = 1,   MAX_VEL = 10;
+
     // =========================
     // Atributos
     // =========================
@@ -36,25 +45,65 @@ public class ArenaUSAC {
     public void agregarPersonaje(String nombre, String arma, int hp, int ataque,
                                  int velocidad, int agilidad, int defensa) {
         if (contadorPersonajes >= personajes.length) {
-            System.out.println("⚠️ No se pueden agregar más personajes (límite alcanzado).");
+            JOptionPane.showMessageDialog(null,
+                    "No se pueden agregar más personajes (límite alcanzado).",
+                    "Aviso", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        // Validar duplicado por nombre
+        // Validar duplicado
         for (int i = 0; i < contadorPersonajes; i++) {
             if (personajes[i].getNombre().equalsIgnoreCase(nombre)) {
-                System.out.println("⚠️ Ya existe un personaje con ese nombre.");
+                JOptionPane.showMessageDialog(null,
+                        "Ya existe un personaje con el nombre: " + nombre,
+                        "Aviso", JOptionPane.WARNING_MESSAGE);
                 return;
             }
         }
 
+        // Validar rangos
+        if (hp < 100 || hp > 500) {
+            JOptionPane.showMessageDialog(null,
+                    "El HP debe estar entre 100 y 500.",
+                    "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (ataque < 10 || ataque > 100) {
+            JOptionPane.showMessageDialog(null,
+                    "El Ataque debe estar entre 10 y 100.",
+                    "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (defensa < 1 || defensa > 50) {
+            JOptionPane.showMessageDialog(null,
+                    "La Defensa debe estar entre 1 y 50.",
+                    "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (agilidad < 1 || agilidad > 10) {
+            JOptionPane.showMessageDialog(null,
+                    "La Agilidad debe estar entre 1 y 10.",
+                    "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (velocidad < 1 || velocidad > 10) {
+            JOptionPane.showMessageDialog(null,
+                    "La Velocidad debe estar entre 1 y 10.",
+                    "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // Crear personaje
         Personaje nuevo = new Personaje(nextId, nombre, arma, hp, ataque, velocidad, agilidad, defensa);
         personajes[contadorPersonajes] = nuevo;
         contadorPersonajes++;
         nextId++;
 
-        System.out.println("✅ Personaje agregado con éxito: " + nombre);
+        JOptionPane.showMessageDialog(null,
+                "Personaje agregado con éxito: " + nombre,
+                "Éxito", JOptionPane.INFORMATION_MESSAGE);
     }
+
 
     public void modificarPersonaje(int id, String arma, int hp, int ataque,
                                    int velocidad, int agilidad, int defensa) {
@@ -360,5 +409,9 @@ public class ArenaUSAC {
         }
         return nombres;
     }
+    private boolean fueraDeRango(int val, int min, int max) {
+        return val < min || val > max;
+    }
+
 }
 
