@@ -1,6 +1,10 @@
 package modelo.usuarios;
 
-public class Cliente extends Usuario {
+import java.io.Serializable;
+
+public class Cliente extends Usuario implements Serializable {
+
+    private static final long serialVersionUID = 1L; // Recomendado para serialización estable
 
     // Atributos adicionales
     private int comprasRealizadas;
@@ -11,8 +15,20 @@ public class Cliente extends Usuario {
         this.comprasRealizadas = 0;
     }
 
-    public int getComprasRealizadas() { return comprasRealizadas; }
-    public void aumentarCompras() { this.comprasRealizadas++; }
+    // =====================================================
+    // 🔹 Métodos propios
+    // =====================================================
+    public int getComprasRealizadas() {
+        return comprasRealizadas;
+    }
+
+    public void aumentarCompras() {
+        this.comprasRealizadas++;
+    }
+
+    public void resetearCompras() {
+        this.comprasRealizadas = 0;
+    }
 
     @Override
     public void mostrarMenu() {
@@ -22,6 +38,11 @@ public class Cliente extends Usuario {
         System.out.println("3. Realizar pedido");
         System.out.println("4. Ver historial de compras");
         System.out.println("5. Cerrar sesión");
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + " | Compras realizadas: " + comprasRealizadas;
     }
 }
 

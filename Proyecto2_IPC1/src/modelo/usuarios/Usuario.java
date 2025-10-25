@@ -1,40 +1,52 @@
 package modelo.usuarios;
 
-public abstract class Usuario {
+import java.io.Serializable;
+
+public abstract class Usuario implements Serializable {
+
+    private static final long serialVersionUID = 1L; // Evita errores de compatibilidad
 
     // Atributos comunes a todos los usuarios
     protected String codigo;
     protected String nombre;
     protected String genero;
-    protected String contrasena;
+    protected String password;
     protected String tipo; // ADMIN, VENDEDOR o CLIENTE
 
     // Constructor
-    public Usuario(String codigo, String nombre, String genero, String contrasena, String tipo) {
+    public Usuario(String codigo, String nombre, String genero, String password, String tipo) {
         this.codigo = codigo;
         this.nombre = nombre;
         this.genero = genero;
-        this.contrasena = contrasena;
+        this.password = password;
         this.tipo = tipo;
     }
 
-    // Getters y Setters
+    // ======================================================
+    // 🔹 Getters y Setters
+    // ======================================================
     public String getCodigo() { return codigo; }
     public String getNombre() { return nombre; }
     public String getGenero() { return genero; }
-    public String getContrasena() { return contrasena; }
+    public String getPassword() { return password; }
     public String getTipo() { return tipo; }
 
     public void setNombre(String nombre) { this.nombre = nombre; }
-    public void setContrasena(String contrasena) { this.contrasena = contrasena; }
+    public void setPassword(String password) { this.password = password; }
+    public void setGenero(String genero) { this.genero = genero; }
+    public void setTipo(String tipo) { this.tipo = tipo; }
 
-    // Método abstracto: cada tipo de usuario tendrá su propio menú
+    // ======================================================
+    // 🔹 Métodos abstractos y comunes
+    // ======================================================
+
+    // Cada tipo de usuario tendrá su propio menú
     public abstract void mostrarMenu();
 
-    // Método común opcional
     @Override
     public String toString() {
-        return "Código: " + codigo + " | Nombre: " + nombre + " | Tipo: " + tipo;
+        return String.format("Código: %s | Nombre: %s | Tipo: %s | Género: %s",
+                codigo, nombre, tipo, (genero != null ? genero : "-"));
     }
 }
 

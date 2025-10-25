@@ -1,6 +1,10 @@
 package modelo.usuarios;
 
-public class Vendedor extends Usuario {
+import java.io.Serializable;
+
+public class Vendedor extends Usuario implements Serializable {
+
+    private static final long serialVersionUID = 1L; // Recomendado para compatibilidad
 
     // Atributo adicional
     private int ventasConfirmadas;
@@ -11,9 +15,20 @@ public class Vendedor extends Usuario {
         this.ventasConfirmadas = 0;
     }
 
-    // Getters / Setters
-    public int getVentasConfirmadas() { return ventasConfirmadas; }
-    public void aumentarVentasConfirmadas() { this.ventasConfirmadas++; }
+    // =====================================================
+    // 🔹 Métodos propios
+    // =====================================================
+    public int getVentasConfirmadas() {
+        return ventasConfirmadas;
+    }
+
+    public void aumentarVentasConfirmadas() {
+        this.ventasConfirmadas++;
+    }
+
+    public void resetearVentas() {
+        this.ventasConfirmadas = 0;
+    }
 
     @Override
     public void mostrarMenu() {
@@ -24,5 +39,12 @@ public class Vendedor extends Usuario {
         System.out.println("4. Ver reportes");
         System.out.println("5. Cerrar sesión");
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + " | Ventas confirmadas: " + ventasConfirmadas;
+    }
 }
+
+
 

@@ -1,4 +1,4 @@
 package modelo.estructuras;
 
-public class ListaClientes {
+public class ListaBitacora {
 }
