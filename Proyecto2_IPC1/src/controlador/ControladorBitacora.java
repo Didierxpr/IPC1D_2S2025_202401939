@@ -1,81 +1,170 @@
 package controlador;
 
-import modelo.Sistema;
-import modelo.bitacora.Bitacora;
-
-import java.io.FileWriter;
-import java.io.IOException;
+import modelo.Bitacora;
+import utilidades.*;
 
 /**
- * Controlador para manejar la visualización y exportación
- * de la bitácora del sistema.
+ * Controlador para gestión de la bitácora del sistema
  */
 public class ControladorBitacora {
 
-    // =========================================================
-    // 🔹 Mostrar bitácora en consola
-    // =========================================================
-    public void mostrarBitacora() {
-        System.out.println("\n=== BITÁCORA DEL SISTEMA ===");
+    private Bitacora[] registros;
 
-        var bitacora = Sistema.getRegistroBitacora();
-
-        if (bitacora.getCantidad() == 0) {
-            System.out.println("⚠️ No hay eventos registrados.");
-            return;
-        }
-
-        System.out.printf("%-5s %-15s %-10s %-40s\n", "ID", "Fecha", "Tipo", "Descripción");
-        System.out.println("---------------------------------------------------------------------");
-
-        for (int i = 0; i < bitacora.getCantidad(); i++) {
-            Bitacora evento = bitacora.getEvento(i);
-            System.out.printf("%-5d %-15s %-10s %-40s\n",
-                    (i + 1),
-                    evento.getFecha(),
-                    evento.getTipo(),
-                    evento.getDescripcion());
-        }
-
-        Sistema.getRegistroBitacora().registrarEvento("BITÁCORA", "Visualización de eventos en consola");
+    public ControladorBitacora() {
+        cargarRegistros();
     }
 
-    // =========================================================
-    // 🔹 Exportar bitácora a CSV
-    // =========================================================
-    public void exportarBitacoraCSV() {
-        String ruta = "data/bitacora.csv";
+    /**
+     * Carga los registros de bitácora desde el sistema de archivos
+     */
+    private void cargarRegistros() {
+        registros = SistemaArchivos.cargarBitacora();
+        if (registros == null) {
+            registros = new Bitacora[0];
+        }
+    }
 
-        try (FileWriter fw = new FileWriter(ruta)) {
-            fw.write("ID,Fecha,Tipo,Descripción\n");
+    /**
+     * Guarda los registros en el sistema de archivos
+     */
+    private boolean guardarRegistros() {
+        return SistemaArchivos.guardarBitacora(registros);
+    }
 
-            var bitacora = Sistema.getRegistroBitacora();
+    /**
+     * Registra una nueva entrada en la bitácora
+     */
+    public boolean registrar(Bitacora entrada) {
+        if (entrada == null) {
+            return false;
+        }
 
-            for (int i = 0; i < bitacora.getCantidad(); i++) {
-                Bitacora evento = bitacora.getEvento(i);
-                fw.write((i + 1) + "," +
-                        evento.getFecha() + "," +
-                        evento.getTipo() + "," +
-                        evento.getDescripcion() + "\n");
+        registros = (Bitacora[]) Vectores.agregar(registros, entrada);
+        return guardarRegistros();
+    }
+
+    /**
+     * Obtiene todos los registros de la bitácora
+     */
+    public Bitacora[] obtenerTodos() {
+        return registros;
+    }
+
+    /**
+     * Filtra registros por tipo de usuario
+     */
+    public Bitacora[] filtrarPorTipoUsuario(String tipoUsuario) {
+        Bitacora[] resultado = new Bitacora[0];
+
+        for (int i = 0; i < registros.length; i++) {
+            if (registros[i].esTipoUsuario(tipoUsuario)) {
+                resultado = (Bitacora[]) Vectores.agregar(resultado, registros[i]);
             }
-
-            fw.flush();
-            System.out.println("✅ Bitácora exportada correctamente en: " + ruta);
-
-            Sistema.getRegistroBitacora().registrarEvento("BITÁCORA", "Exportación de bitácora a CSV");
-
-        } catch (IOException e) {
-            System.out.println("❌ Error al exportar bitácora: " + e.getMessage());
         }
+
+        return resultado;
     }
 
-    // =========================================================
-    // 🔹 Limpiar bitácora
-    // =========================================================
-    public void limpiarBitacora() {
-        Sistema.getRegistroBitacora().limpiar();
-        System.out.println("🧹 Bitácora limpiada correctamente.");
-        Sistema.getRegistroBitacora().registrarEvento("BITÁCORA", "Bitácora limpiada manualmente");
+    /**
+     * Filtra registros por usuario específico
+     */
+    public Bitacora[] filtrarPorUsuario(String codigoUsuario) {
+        Bitacora[] resultado = new Bitacora[0];
+
+        for (int i = 0; i < registros.length; i++) {
+            if (registros[i].esDeUsuario(codigoUsuario)) {
+                resultado = (Bitacora[]) Vectores.agregar(resultado, registros[i]);
+            }
+        }
+
+        return resultado;
+    }
+
+    /**
+     * Filtra registros por operación
+     */
+    public Bitacora[] filtrarPorOperacion(String operacion) {
+        Bitacora[] resultado = new Bitacora[0];
+
+        for (int i = 0; i < registros.length; i++) {
+            if (registros[i].esOperacion(operacion)) {
+                resultado = (Bitacora[]) Vectores.agregar(resultado, registros[i]);
+            }
+        }
+
+        return resultado;
+    }
+
+    /**
+     * Filtra registros por fecha
+     */
+    public Bitacora[] filtrarPorFecha(String fecha) {
+        Bitacora[] resultado = new Bitacora[0];
+
+        for (int i = 0; i < registros.length; i++) {
+            if (registros[i].esDeFecha(fecha)) {
+                resultado = (Bitacora[]) Vectores.agregar(resultado, registros[i]);
+            }
+        }
+
+        return resultado;
+    }
+
+    /**
+     * Filtra registros por estado (EXITOSA/FALLIDA)
+     */
+    public Bitacora[] filtrarPorEstado(String estado) {
+        Bitacora[] resultado = new Bitacora[0];
+
+        for (int i = 0; i < registros.length; i++) {
+            if (registros[i].getEstado().equalsIgnoreCase(estado)) {
+                resultado = (Bitacora[]) Vectores.agregar(resultado, registros[i]);
+            }
+        }
+
+        return resultado;
+    }
+
+    /**
+     * Exporta la bitácora completa a CSV
+     */
+    public boolean exportarCSV(String rutaArchivo) {
+        if (registros.length == 0) {
+            System.err.println("No hay registros para exportar");
+            return false;
+        }
+
+        String encabezado = "Fecha,Hora,Tipo Usuario,Codigo Usuario,Nombre Usuario," +
+                "Operacion,Estado,Descripcion,Detalles Adicionales";
+
+        String[] lineas = new String[registros.length];
+
+        for (int i = 0; i < registros.length; i++) {
+            lineas[i] = registros[i].toCSV();
+        }
+
+        return ManejadorArchivos.escribirCSV(rutaArchivo, encabezado, lineas);
+    }
+
+    /**
+     * Obtiene la cantidad total de registros
+     */
+    public int contarRegistros() {
+        return registros.length;
+    }
+
+    /**
+     * Limpia todos los registros (usar con precaución)
+     */
+    public boolean limpiarTodo() {
+        registros = new Bitacora[0];
+        return guardarRegistros();
+    }
+
+    /**
+     * Recarga los registros desde el sistema de archivos
+     */
+    public void recargar() {
+        cargarRegistros();
     }
 }
-
