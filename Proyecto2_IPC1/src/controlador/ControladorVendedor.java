@@ -47,7 +47,15 @@ public class ControladorVendedor implements ICRUD<Vendedor> {
             return false;
         }
 
-        vendedores = (Vendedor[]) Vectores.agregar(vendedores, vendedor);
+        // 👇 Solución al ClassCastException
+        Object[] temp = Vectores.agregar(vendedores, vendedor);
+
+        Vendedor[] nuevo = new Vendedor[temp.length];
+        for (int i = 0; i < temp.length; i++) {
+            nuevo[i] = (Vendedor) temp[i];
+        }
+        vendedores = nuevo;
+
         boolean resultado = guardarVendedores();
 
         if (resultado) {
@@ -56,6 +64,7 @@ public class ControladorVendedor implements ICRUD<Vendedor> {
 
         return resultado;
     }
+
 
     @Override
     public Vendedor[] obtenerTodos() {

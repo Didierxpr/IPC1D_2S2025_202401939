@@ -39,9 +39,20 @@ public class ControladorBitacora {
             return false;
         }
 
-        registros = (Bitacora[]) Vectores.agregar(registros, entrada);
+        // Agrega la nueva entrada sin causar ClassCastException
+        Object[] temp = Vectores.agregar(registros, entrada);
+
+        // Convierte el arreglo genérico en un arreglo del tipo Bitacora
+        Bitacora[] nuevo = new Bitacora[temp.length];
+        for (int i = 0; i < temp.length; i++) {
+            nuevo[i] = (Bitacora) temp[i];
+        }
+
+        registros = nuevo;
+
         return guardarRegistros();
     }
+
 
     /**
      * Obtiene todos los registros de la bitácora

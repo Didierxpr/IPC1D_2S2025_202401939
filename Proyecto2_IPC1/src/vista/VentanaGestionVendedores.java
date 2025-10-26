@@ -227,6 +227,9 @@ public class VentanaGestionVendedores extends JFrame {
                         "Éxito",
                         JOptionPane.INFORMATION_MESSAGE
                 );
+
+                controladorSistema.recargarUsuarios();
+
                 cargarDatos();
                 controladorSistema.getGestorHilos().notificarActividad("Vendedor creado: " + codigo);
             } else {
@@ -285,6 +288,9 @@ public class VentanaGestionVendedores extends JFrame {
                         "Éxito",
                         JOptionPane.INFORMATION_MESSAGE
                 );
+
+                controladorSistema.recargarUsuarios();
+
                 cargarDatos();
                 controladorSistema.getGestorHilos().notificarActividad("Vendedor actualizado: " + codigo);
             } else {

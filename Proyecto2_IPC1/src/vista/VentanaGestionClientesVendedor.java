@@ -235,6 +235,9 @@ public class VentanaGestionClientesVendedor extends JFrame {
                         "Éxito",
                         JOptionPane.INFORMATION_MESSAGE
                 );
+
+                controladorSistema.recargarUsuarios();
+
                 cargarDatos();
                 controladorSistema.getGestorHilos().notificarActividad("Cliente creado: " + codigo);
             } else {
@@ -311,6 +314,9 @@ public class VentanaGestionClientesVendedor extends JFrame {
                         "Éxito",
                         JOptionPane.INFORMATION_MESSAGE
                 );
+
+                controladorSistema.recargarUsuarios();
+
                 cargarDatos();
                 controladorSistema.getGestorHilos().notificarActividad("Cliente actualizado: " + codigo);
             } else {

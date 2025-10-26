@@ -45,6 +45,7 @@ public class ControladorSistema {
         // Crear administrador por defecto si no existe
         if (!SistemaArchivos.existenAdministradores()) {
             System.out.println("\nCreando administrador por defecto...");
+            SistemaArchivos.eliminarTodo();
             SistemaArchivos.inicializarAdministradorDefecto(seccion);
         }
 
@@ -284,6 +285,22 @@ public class ControladorSistema {
     public boolean isSistemaIniciado() {
         return sistemaIniciado;
     }
+
+    /**
+     * Recarga en memoria todos los usuarios (admins, vendedores y clientes)
+     * después de crear/eliminar usuarios, sin reiniciar el sistema.
+     */
+    public void recargarUsuarios() {
+        if (controladorAutenticacion != null) {
+            controladorAutenticacion.setAdministradores(SistemaArchivos.cargarAdministradores());
+            controladorAutenticacion.setVendedores(SistemaArchivos.cargarVendedores());
+            controladorAutenticacion.setClientes(SistemaArchivos.cargarClientes());
+            System.out.println("🔁 Usuarios recargados en memoria correctamente.");
+        } else {
+            System.err.println("No hay controlador de autenticación activo.");
+        }
+    }
+
 
     /**
      * Obtiene estadísticas generales del sistema

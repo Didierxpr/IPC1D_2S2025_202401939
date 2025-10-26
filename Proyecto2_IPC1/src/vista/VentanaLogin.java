@@ -2,6 +2,8 @@ package vista;
 
 import controlador.ControladorSistema;
 import modelo.Usuario;
+import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.FlatDarkLaf;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,8 +22,10 @@ public class VentanaLogin extends JFrame {
     private JPasswordField txtContrasenia;
     private JButton btnIngresar;
     private JButton btnSalir;
+    private JButton btnModo; // 🔹 Botón modo oscuro
     private JLabel lblTitulo;
     private JLabel lblSubtitulo;
+    private boolean modoOscuro = false; // 🔹 Estado del tema
 
     public VentanaLogin(ControladorSistema controladorSistema) {
         this.controladorSistema = controladorSistema;
@@ -30,15 +34,14 @@ public class VentanaLogin extends JFrame {
     }
 
     private void inicializarComponentes() {
-        // Panel principal con color de fondo
-        JPanel panelPrincipal = new JPanel();
-        panelPrincipal.setLayout(new BorderLayout());
-        panelPrincipal.setBackground(new Color(41, 128, 185));
+        // Panel principal
+        JPanel panelPrincipal = new JPanel(new BorderLayout());
+        panelPrincipal.setBackground(UIManager.getColor("Panel.background"));
 
-        // Panel superior con título
+        // Panel superior (Título)
         JPanel panelTitulo = new JPanel();
         panelTitulo.setLayout(new BoxLayout(panelTitulo, BoxLayout.Y_AXIS));
-        panelTitulo.setBackground(new Color(41, 128, 185));
+        panelTitulo.setBackground(new Color(41, 128, 185)); // azul institucional
         panelTitulo.setBorder(BorderFactory.createEmptyBorder(30, 20, 20, 20));
 
         lblTitulo = new JLabel("SANCARLISTA SHOP");
@@ -55,10 +58,9 @@ public class VentanaLogin extends JFrame {
         panelTitulo.add(Box.createRigidArea(new Dimension(0, 10)));
         panelTitulo.add(lblSubtitulo);
 
-        // Panel central con formulario
-        JPanel panelFormulario = new JPanel();
-        panelFormulario.setLayout(new GridBagLayout());
-        panelFormulario.setBackground(Color.WHITE);
+        // Panel formulario
+        JPanel panelFormulario = new JPanel(new GridBagLayout());
+        panelFormulario.setBackground(UIManager.getColor("Panel.background"));
         panelFormulario.setBorder(BorderFactory.createEmptyBorder(40, 40, 40, 40));
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -76,10 +78,6 @@ public class VentanaLogin extends JFrame {
         // Campo Usuario
         txtUsuario = new JTextField(20);
         txtUsuario.setFont(new Font("Arial", Font.PLAIN, 14));
-        txtUsuario.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(189, 195, 199), 1),
-                BorderFactory.createEmptyBorder(5, 10, 5, 10)
-        ));
         gbc.gridy = 1;
         panelFormulario.add(txtUsuario, gbc);
 
@@ -92,84 +90,97 @@ public class VentanaLogin extends JFrame {
         // Campo Contraseña
         txtContrasenia = new JPasswordField(20);
         txtContrasenia.setFont(new Font("Arial", Font.PLAIN, 14));
-        txtContrasenia.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(189, 195, 199), 1),
-                BorderFactory.createEmptyBorder(5, 10, 5, 10)
-        ));
         gbc.gridy = 3;
         panelFormulario.add(txtContrasenia, gbc);
 
-        // Panel de botones
-        JPanel panelBotones = new JPanel();
-        panelBotones.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 0));
-        panelBotones.setBackground(Color.WHITE);
+        // Panel botones
+        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
+        panelBotones.setBackground(UIManager.getColor("Panel.background"));
 
         btnIngresar = new JButton("Ingresar");
         btnIngresar.setFont(new Font("Arial", Font.BOLD, 14));
-        btnIngresar.setBackground(new Color(46, 204, 113));
-        btnIngresar.setForeground(Color.WHITE);
         btnIngresar.setFocusPainted(false);
-        btnIngresar.setBorder(BorderFactory.createEmptyBorder(10, 30, 10, 30));
         btnIngresar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        estilizarBotonVerde(btnIngresar);
 
         btnSalir = new JButton("Salir");
         btnSalir.setFont(new Font("Arial", Font.BOLD, 14));
-        btnSalir.setBackground(new Color(231, 76, 60));
-        btnSalir.setForeground(Color.WHITE);
         btnSalir.setFocusPainted(false);
-        btnSalir.setBorder(BorderFactory.createEmptyBorder(10, 30, 10, 30));
         btnSalir.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        estilizarBotonRojo(btnSalir);
+
+        // 🔹 Botón de modo oscuro
+        btnModo = new JButton("🌙 Modo oscuro");
+        btnModo.setFont(new Font("Arial", Font.BOLD, 12));
+        btnModo.setFocusPainted(false);
+        btnModo.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        estilizarBotonNeutro(btnModo);
 
         panelBotones.add(btnIngresar);
         panelBotones.add(btnSalir);
+        panelBotones.add(btnModo);
 
         gbc.gridy = 4;
         gbc.insets = new Insets(20, 10, 10, 10);
         panelFormulario.add(panelBotones, gbc);
 
-        // Agregar paneles al panel principal
+        // Añadir paneles al principal
         panelPrincipal.add(panelTitulo, BorderLayout.NORTH);
         panelPrincipal.add(panelFormulario, BorderLayout.CENTER);
 
-        // Agregar al frame
         add(panelPrincipal);
-
-        // Event Listeners
         configurarEventos();
     }
 
     private void configurarEventos() {
         // Botón Ingresar
-        btnIngresar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                realizarLogin();
-            }
-        });
+        btnIngresar.addActionListener(e -> realizarLogin());
 
         // Enter en campo de contraseña
-        txtContrasenia.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                realizarLogin();
+        txtContrasenia.addActionListener(e -> realizarLogin());
+
+        // Botón Salir
+        btnSalir.addActionListener(e -> {
+            int respuesta = JOptionPane.showConfirmDialog(
+                    VentanaLogin.this,
+                    "¿Está seguro de salir del sistema?",
+                    "Confirmar Salida",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE
+            );
+
+            if (respuesta == JOptionPane.YES_OPTION) {
+                controladorSistema.cerrarSistema();
+                System.exit(0);
             }
         });
 
-        // Botón Salir
-        btnSalir.addActionListener(new ActionListener() {
+        // 🔹 Evento modo oscuro / claro
+        btnModo.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int respuesta = JOptionPane.showConfirmDialog(
-                        VentanaLogin.this,
-                        "¿Está seguro de salir del sistema?",
-                        "Confirmar Salida",
-                        JOptionPane.YES_NO_OPTION,
-                        JOptionPane.QUESTION_MESSAGE
-                );
+                try {
+                    if (!modoOscuro) {
+                        FlatDarkLaf.setup();
+                        btnModo.setText("☀️ Modo claro");
+                    } else {
+                        FlatLightLaf.setup();
+                        btnModo.setText("🌙 Modo oscuro");
+                    }
+                    modoOscuro = !modoOscuro;
 
-                if (respuesta == JOptionPane.YES_OPTION) {
-                    controladorSistema.cerrarSistema();
-                    System.exit(0);
+                    // 🔹 Actualiza TODAS las ventanas abiertas
+                    for (Window window : Window.getWindows()) {
+                        SwingUtilities.updateComponentTreeUI(window);
+                    }
+
+                    // 🔹 Reaplica estilos dinámicos
+                    estilizarBotonVerde(btnIngresar);
+                    estilizarBotonRojo(btnSalir);
+                    estilizarBotonNeutro(btnModo);
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
             }
         });
@@ -189,14 +200,11 @@ public class VentanaLogin extends JFrame {
             return;
         }
 
-        // Intentar login
         Usuario usuarioAutenticado = controladorSistema.login(usuario, contrasenia);
 
         if (usuarioAutenticado != null) {
-            // Login exitoso
-            this.dispose(); // Cerrar ventana de login
+            this.dispose();
 
-            // Abrir ventana según tipo de usuario
             String tipoUsuario = usuarioAutenticado.getTipoUsuario();
 
             switch (tipoUsuario) {
@@ -211,7 +219,6 @@ public class VentanaLogin extends JFrame {
                     break;
             }
         } else {
-            // Login fallido
             JOptionPane.showMessageDialog(
                     this,
                     "Usuario o contraseña incorrectos",
@@ -227,7 +234,42 @@ public class VentanaLogin extends JFrame {
         setTitle("Sancarlista Shop - Login");
         setSize(500, 450);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null); // Centrar en pantalla
+        setLocationRelativeTo(null);
         setResizable(false);
     }
+
+    // 🔹 Métodos de estilo dinámico
+    private void estilizarBotonVerde(JButton boton) {
+        if (modoOscuro) {
+            boton.setBackground(new Color(46, 204, 113));
+            boton.setForeground(Color.BLACK);
+        } else {
+            boton.setBackground(new Color(10, 239, 108));
+            boton.setForeground(Color.WHITE);
+        }
+        boton.setBorder(BorderFactory.createEmptyBorder(10, 30, 10, 30));
+    }
+
+    private void estilizarBotonRojo(JButton boton) {
+        if (modoOscuro) {
+            boton.setBackground(new Color(231, 76, 60));
+            boton.setForeground(Color.BLACK);
+        } else {
+            boton.setBackground(new Color(227, 51, 33));
+            boton.setForeground(Color.WHITE);
+        }
+        boton.setBorder(BorderFactory.createEmptyBorder(10, 30, 10, 30));
+    }
+
+    private void estilizarBotonNeutro(JButton boton) {
+        if (modoOscuro) {
+            boton.setBackground(new Color(149, 165, 166));
+            boton.setForeground(Color.BLACK);
+        } else {
+            boton.setBackground(new Color(189, 195, 199));
+            boton.setForeground(Color.WHITE);
+        }
+        boton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+    }
 }
+

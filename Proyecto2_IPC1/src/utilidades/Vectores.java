@@ -7,30 +7,39 @@ package utilidades;
 public class Vectores {
 
     // ==================== MÉTODOS GENÉRICOS PARA OBJETOS ====================
-
     /**
-     * Agrega un elemento al final del arreglo
+     * Agrega un elemento al final del arreglo (versión genérica)
      * @param arreglo Arreglo original
      * @param elemento Elemento a agregar
      * @return Nuevo arreglo con el elemento agregado
      */
-    public static Object[] agregar(Object[] arreglo, Object elemento) {
+    public static <T> T[] agregar(T[] arreglo, T elemento) {
         if (arreglo == null) {
-            arreglo = new Object[0];
+            // Crear un nuevo arreglo del tipo del elemento
+            @SuppressWarnings("unchecked")
+            T[] nuevoArreglo = (T[]) java.lang.reflect.Array.newInstance(elemento.getClass(), 1);
+            nuevoArreglo[0] = elemento;
+            return nuevoArreglo;
         }
 
-        Object[] nuevoArreglo = new Object[arreglo.length + 1];
+        // Crear nuevo arreglo del mismo tipo con +1 de tamaño
+        @SuppressWarnings("unchecked")
+        T[] nuevoArreglo = (T[]) java.lang.reflect.Array.newInstance(
+                arreglo.getClass().getComponentType(),
+                arreglo.length + 1
+        );
 
-        // Copiar elementos existentes
+        // Copiar los elementos
         for (int i = 0; i < arreglo.length; i++) {
             nuevoArreglo[i] = arreglo[i];
         }
 
-        // Agregar nuevo elemento
+        // Agregar el nuevo
         nuevoArreglo[arreglo.length] = elemento;
 
         return nuevoArreglo;
     }
+
 
     /**
      * Elimina un elemento en una posición específica

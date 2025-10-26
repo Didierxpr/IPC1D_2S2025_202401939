@@ -193,4 +193,17 @@ public class ControladorAutenticacion implements IAutenticacion {
     public void recargarUsuarios() {
         cargarUsuarios();
     }
+
+    public void setAdministradores(Administrador[] administradores) {
+        this.administradores = administradores;
+    }
+
+    public void setVendedores(Vendedor[] vendedores) {
+        this.vendedores = vendedores;
+    }
+
+    public void setClientes(Cliente[] clientes) {
+        this.clientes = clientes;
+    }
+
 }

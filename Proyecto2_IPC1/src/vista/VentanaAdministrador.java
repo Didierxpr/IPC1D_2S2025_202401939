@@ -193,9 +193,9 @@ public class VentanaAdministrador extends JFrame {
                 "════════════════════════════════\n" +
                         "    DATOS DEL ESTUDIANTE\n" +
                         "════════════════════════════════\n\n" +
-                        "Nombre: [TU NOMBRE COMPLETO]\n" +
-                        "Carné: [TU CARNÉ]\n" +
-                        "Sección: A\n" +
+                        "Nombre: Carlos Didiere Cabrera Rodriguez\n" +
+                        "Carné: 202401939\n" +
+                        "Sección: D\n" +
                         "Curso: Introducción a la Programación\n" +
                         "         y Computación 1\n" +
                         "Proyecto: Sancarlista Shop v1.0\n\n" +
