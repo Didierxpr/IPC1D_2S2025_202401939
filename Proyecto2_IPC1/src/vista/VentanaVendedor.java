@@ -155,14 +155,14 @@ public class VentanaVendedor extends JFrame {
         btnGestionPedidos.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-               // new VentanaGestionPedidosVendedor(controladorSistema, usuarioActual).setVisible(true);
+                new VentanaGestionPedidosVendedor(controladorSistema, usuarioActual).setVisible(true);
             }
         });
 
         btnVerProductos.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-               // new VentanaVerProductos(controladorSistema).setVisible(true);
+                new VentanaVerProductos(controladorSistema).setVisible(true);
             }
         });
 

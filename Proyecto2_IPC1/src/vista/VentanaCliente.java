@@ -1,5 +1,6 @@
 package vista;
 
+import controlador.ControladorCarrito;
 import controlador.ControladorSistema;
 import modelo.Usuario;
 import modelo.Cliente;
@@ -136,21 +137,26 @@ public class VentanaCliente extends JFrame {
         btnCatalogo.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // new VentanaCatalogoCliente(controladorSistema, usuarioActual).setVisible(true);
+                new VentanaCatalogoCliente(controladorSistema, usuarioActual).setVisible(true);
             }
         });
 
         btnCarrito.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-              //  new VentanaCarritoCompras(controladorSistema, usuarioActual).setVisible(true);
+                new VentanaCarritoCompras(
+                        controladorSistema,
+                        usuarioActual,
+                        new ControladorCarrito((Cliente) usuarioActual, usuarioActual)
+                ).setVisible(true);
+
             }
         });
 
         btnHistorial.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-              //  new VentanaHistorialCompras(controladorSistema, usuarioActual).setVisible(true);
+              new VentanaHistorialCompras(controladorSistema, usuarioActual).setVisible(true);
             }
         });
 
