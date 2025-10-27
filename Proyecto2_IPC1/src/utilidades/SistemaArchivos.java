@@ -325,7 +325,7 @@ public class SistemaArchivos {
         }
 
         Administrador admin = new Administrador("admin", "Administrador del Sistema",
-                "Masculino", "IPC1D");
+                "Masculino", "IPC1" + seccion);
 
         Administrador[] admins = new Administrador[1];
         admins[0] = admin;
@@ -335,7 +335,7 @@ public class SistemaArchivos {
         if (exitoso) {
             System.out.println("✓ Administrador por defecto creado:");
             System.out.println("  Usuario: admin");
-            System.out.println("  Contraseña: IPC1D");
+            System.out.println("  Contraseña: IPC1" + seccion);
         }
 
         return exitoso;

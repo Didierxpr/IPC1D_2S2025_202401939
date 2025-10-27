@@ -38,22 +38,22 @@ public class ControladorSistema {
         // Inicializar sistema de archivos
         SistemaArchivos.inicializar();
 
-        // Verificar integridad de archivos
-        System.out.println("Verificando integridad de archivos...");
-        SistemaArchivos.verificarIntegridad();
-
-        // Crear administrador por defecto si no existe
-        if (!SistemaArchivos.existenAdministradores()) {
-            System.out.println("\nCreando administrador por defecto...");
-            SistemaArchivos.eliminarTodo();
-            SistemaArchivos.inicializarAdministradorDefecto(seccion);
+        // Forzar limpieza solo de administradores si quieres resetear contraseña
+        System.out.println("🔄 Reiniciando administrador por defecto...");
+        Administrador[] adminsExistentes = SistemaArchivos.cargarAdministradores();
+        if (adminsExistentes != null && adminsExistentes.length > 0) {
+            // Elimina solo los administradores
+            SistemaArchivos.guardarAdministradores(new Administrador[0]);
+            System.out.println("🧹 Administradores anteriores eliminados.");
         }
 
-        // Inicializar controlador de autenticación
+        // Crear administrador por defecto con la nueva sección (por ejemplo D)
+        SistemaArchivos.inicializarAdministradorDefecto("D");
+
+        // Inicializar controladores
         controladorAutenticacion = new ControladorAutenticacion();
         controladorBitacora = new ControladorBitacora();
 
-        // Registrar inicio del sistema
         Bitacora inicioSistema = new Bitacora(
                 "SISTEMA",
                 "SYSTEM",
@@ -74,6 +74,7 @@ public class ControladorSistema {
 
         return true;
     }
+
 
     /**
      * Realiza login en el sistema
